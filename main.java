@@ -1,7 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
-
 public class main {
 
 	 // Create array of nodes
@@ -28,13 +27,7 @@ public class main {
     // Using array list to create path list
     private ArrayList<Node> finalPath;
 
-    /**
-     * main method that creates a 15x15 tile environment with all nodes having a 10%
-     * chance of being blocked takes input from user for x,y start and x,y end, then
-     * uses a star to calculate the appropriate path, if there is one, then returns
-     * the correct path from starting x,y node to ending x,y node this repeats until
-     * user exits
-     */
+ 
     public static void main(String[] args) {
         // Create new scanner
         Scanner scanner = new Scanner(System.in);
@@ -157,359 +150,321 @@ public class main {
         System.out.println("Thanks for playing");
     }
 
-    /** 			KEEP FIXING COMMENTS 							*/
-    /** a star search constructor */
+
+    /** Constructor for AStar search */
     public main(Node[][] nodeArray, int startRow, int startColumn, int goalRow, int goalColumn, int boundary) {
 
-        // set the boundary to boundary
+        // Set boundary
         tileBoundary = boundary;
 
-        // set the node array to nodes
+        // Set node array
         nodesArray = nodeArray;
 
-        // initialize the open list to a blank array list
+        // Initialize the open list
         openList = new ArrayList<>();
 
-        // initliaize the closed list toa new blank array list
+        // Initialize the closed list
         closedList = new ArrayList<>();
 
-        // set the goal node to the goal row and goalcolumn
+        // Set goal node to goal row and column
         goalNode = nodesArray[goalRow][goalColumn];
 
-        // setthe start node to the start row and column
+        // Set start node to start row and column
         startNode = nodesArray[startRow][startColumn];
 
-        // set the G ofstart tozero
+        // Set the G of start to zero
         startNode.setG(0);
 
-        // set the H of start to the calculated heuristic of start
-
+        // Set the H of start to calc heuristic of start
         startNode.setH(calcHeuristic(startNode));
 
-        // set the F of start to g+h using method
+        // Set the F of start to g+h using method
         startNode.setF();
 
-        // set the parent of start to null
+        // Set the parent of start to null
         startNode.setParent(null);
 
-        // add start to the openlist
+        // Add start node to open list and search
         openList.add(startNode);
-
-        // do search
         searchBoard();
 
-    }// end of constructor
+    }
 
     /**
-     * method to search the tiles, pulling from the open list, generating the
-     * appropraite path, and then adding the node to the closed list
+     * Search tiles
+     * Pull from open list
+     * Generate path
+     * Add node to closed list
      */
     public void searchBoard() {
 
-        // make a node called currentnode
+    	// Create node: currentNode
         Node currentNode;
 
-        // while the size of theopenlist isntzero, aka after start is initialized
+        // While the size of the open list isn't zero set the current node by using the find lowest value
         while (openList.size() != 0) {
-
-            // set the current node by using thefind lowest method
             currentNode = findLowestValue();
 
-            // remove the current node from the open list
+            // Remove current node from open list
             openList.remove(currentNode);
 
-            // if thecurrent node is the goal node
+            // If the current node equals the goal node set pathFound to true
             if (currentNode.equals(goalNode)) {
-
-                // set the path found to true
                 pathFound = true;
 
-                // generate the solution path
+                // Generate solution path
                 createPath();
 
-            } // end of if statement
+            }
 
-            // generate the neighbors of the current node
+            // Generate neighbors of current node
             createNeighbors(currentNode);
 
-            // add the current node to the closed list
+            // Add current node to closed list
             closedList.add(currentNode);
 
-        } // end of while loop
-    }// end of search board method
+        }
+    }
 
     /**
-     * method to generate the node neighbors , check if the node is valid, calculate
-     * the cost of moving, setting G, H, and F, then updating the parent, and adding
-     * the node to the open list if it isnt already there
+     * Generate node neighbors
+     * Check if node is valid
+     * Calculate cost of moving
+     * Set G, H, F and update parent
+     * Add node to open list if not there already
      */
     public void createNeighbors(Node node) {
-        // set the row to the node row
+    	
+    	// Set the row to node row
         int row = node.getRow();
 
-        // set the column to the node column
+        // Set the column to node column
         int column = node.getCol();
 
-        // loop through all neighbors
+        // Loop through neighbors
         for (int i = 0; i < 8; i++) {
 
-            // create a check node
+        	// Create check node
             Node checkNode;
             try {
-                // go through all of for loop and set the node row and column based on
-                // surroundings
-
-                // node is one above
+            	// Go through all for loop and set the node row and column based on surroundings
+                // Node is one above | End if i=0
                 if (i == 0) {
                     checkNode = nodesArray[row + 1][column];
-                } // end of if i=0
+                }
 
-                // node is one below
+                // Node is one below | End if i=1
                 else if (i == 1) {
                     checkNode = nodesArray[row - 1][column];
-                } // end of if i=1
+                }
 
-                // node is one right
+                // Node is one to the right | End if i=2
                 else if (i == 2) {
                     checkNode = nodesArray[row][column + 1];
-                } // end of if i=2
+                }
 
-                // node is one left
+                // Node is one to the left | End if i=3
                 else if (i == 3) {
                     checkNode = nodesArray[row][column - 1];
-                } // end of if i=3
+                }
 
-                // node is diagonal bottom left
+                // Node is diagonal bottom left | End if i=4
                 else if (i == 4) {
                     checkNode = nodesArray[row - 1][column - 1];
-                } // end of if i=4
+                }
 
-                // node is diagonal bottom right
+                // Node is diagonal bottom right | End if i=5
                 else if (i == 5) {
                     checkNode = nodesArray[row - 1][column + 1];
-                } // end of if i=5
+                }
 
-                // node is diagonal top left
+                // Node is diagonal top left | End if i=6
                 else if (i == 6) {
                     checkNode = nodesArray[row + 1][column - 1];
-                } // end of if i=6
+                }
 
-                // node is diagonal top right
+                // Node is diagonal top right | End
                 else {
                     checkNode = nodesArray[row + 1][column + 1];
-                } // end of
+                }
 
-            } // end d0
+            }
             catch (Exception e) {
                 continue;
             }
 
-            // see ifthe checked node is valid
+            // See if the checked node is valid
             if (isValidMove(checkNode)) {
 
-                // create a cost of moving and set it to the g cost
+            	// Create a cost of moving and set
                 int costOfMoving = node.getG();
 
-                // if less than 4 aka a straight move, add 10 to the move ocst
+                // If less than 4 then add 10 to costOfMoving
                 if (i < 4) {
                     costOfMoving = costOfMoving + 10;
 
-                } // end of if i<4
-
-                // otherwise add 14 to the move cost because its diagonal
+                }
+                
+                // Add 14 to costOfMoving because its diagonal
                 else {
                     costOfMoving = costOfMoving + 14;
 
-                } // end of else statement
+                }
 
-                // if the gcost of thechecked node is zero or if the g cost ofthechecked node is
-                // greater than zero and the cost of moving is less than g cost
                 if (checkNode.getG() == 0 || (checkNode.getG() > 0 && costOfMoving < checkNode.getG())) {
 
-                    // set the g costof hte checked node tothe current movecost
+                	// Set checkNode to costOfMoving based on if statement
                     checkNode.setG(costOfMoving);
 
-                    // set the h of the checked node tothe heuristic calcuation of the node
-
+                    // Set the H of the checked node to calcHeuristic
                     checkNode.setH(calcHeuristic(checkNode));
 
-                    // set the f node of the checked node
+                    // Set F of node to checkNode
                     checkNode.setF();
 
-                    // set the parent node of the checked node
+                    // Set parent node to checkNode
                     checkNode.setParent(node);
 
-                    // if the open list doesnt have the checked node in it,add it to the openlist
+                    // Add to openList if the open list has no checked node
                     if (!openList.contains(checkNode)) {
                         openList.add(checkNode);
-                    } // end of inner if
-                } // end of outer if statement
-            } // end of if valid
-        } // end of for loop
-
-    }// end of generate neighbors method
+                    }
+                }
+            }
+        }
+    }
 
     /**
-     * method to generate the path once the goal has been reached by backtracking
-     * parent nodes and adding them to the array list
+     * Generate the path once the goal is reached through backtracking 
+     * Add parent nodes to array list
      */
     public void createPath() {
-        // create a new path variable
+    	// Create a new path variable
         finalPath = new ArrayList<>();
 
-        // set the current node to the goal node
+        // Set the currentNode to goalNode
         Node currentNode = goalNode;
 
-        // while the parent of hte current nodeisnt null
+        // While the parent of the currentNode isn't null
+        // Add the current node to the path and set the parent node
         while (currentNode.getParent() != null) {
-
-            // add the current node to the path
             finalPath.add(currentNode);
-
-            // set the current node to its parent node to backtrack
             currentNode = currentNode.getParent();
-        } // end of while loop
+        }
 
         finalPath.add(currentNode);
 
-    }// end of generate path method
+    }
 
-    /** method to get the node path */
+    /** Get to node path method */
     public ArrayList<Node> getNodePath() {
-        // return the node path
         return finalPath;
-    }// end of get node path method
+    }
 
-    /** method to return if the path is found or not */
+    /** Return if path is not found method*/
     public boolean pathFound() {
-        // return the pathfound variable
         return pathFound;
 
-    }// end of path found method
+    }
 
-    /**
-     * method to return if the move is valid, within the bounds and is pathable, and
-     * is not in the closed list
-     */
+    /** Return if move is valid, not in closed list, and is pathable  */
     public boolean isValidMove(Node node) {
-        // if the node iswithin the bounds and is pathable, and its not in the closed
-        // list return true, otherwise returnfalse
         if (isWithinBounds(node) && pathable(node) && !closedList.contains(node)) {
             return true;
-        } // end of if statement
+        }
         else {
             return false;
-        } // end else
+        }
 
-    }// end of valid method
+    }
 
-    /** method to check if the node is within the bounds of the environment */
+    /** Check if node is within the bounds of the environment method*/
     public boolean isWithinBounds(Node node) {
-        // set the row to the node row
+    	// Set the row to the node row
         int row = node.getRow();
 
-        // set the column to the node column
+        // Set the column to the node column
         int column = node.getCol();
 
-        // if therow is greater orequal to 0 and its less than the boundary of hte
-        // mapand the column is greater orequal to 0 and its less than the boundary
-        // return true
         if (row >= 0 && row < tileBoundary && column >= 0 && column < tileBoundary) {
             return true;
-        } // end of if statement
+        }
 
-        // else returnfalse
         else {
             return false;
-        } // end else
+        }
+    }
 
-    }// end of is within bounds
-
-    /** method to check if the node is pathable */
+    /** Check if node is pathable method*/
     public boolean pathable(Node node) {
-        // if the node type is pathable return true
+    	// if node is pathable return true
         if (node.getType() == "") {					/** FIX */
             return true;
-        } // end of if statmenet
-          // else return false
+        }
         else {
             return false;
-        } // end else statemnet
-    }// end of pathable method
+        }
+    }
 
-    /** method to find the lowest f value from the open list */
+    /** Find the lowest f value method */
     public Node findLowestValue() {
         // if the size of the openlist isnt zero
+    	// If the size of openList isn't zero create a lowest node and set openList to 0
         if (openList.size() != 0) {
-
-            // create a lowest node and set it to the open list 0
             Node lowestFNode = openList.get(0);
 
-            // loop through theopen list
+            // Loop for openList
             for (int i = 1; i < openList.size(); i++) {
 
-                // if the open list node f cost is less than the lowest f cost
+            	// If openList is less than lowest F then set to the lowest open list node
                 if (openList.get(i).getF() < lowestFNode.getF()) {
-
-                    // set the lowest tothe open list node
                     lowestFNode = openList.get(i);
-                } // end of inner if
-            } // end of for statement
-
-            // return the lowest
+                }
+            }
             return lowestFNode;
 
-        } // end of outer if statement
-
-        // return null
+        }
         return null;
-    }// end of find lowest value method
+    }
 
-    /** method to calculate the heuristic value of the node */
+    /** Calculate the heuristic value of the node method*/
     public int calcHeuristic(Node node) {
-        // create a current row variableand set it to the node row
+    	// Create currentRow and set to node row
         int currentRow = node.getRow();
 
-        // create a currentcolumn variable and set it to the node column
+        // Create currenColumn and set to node column
         int currentColumn = node.getCol();
 
-        // set the heuristic value to 0
+        // Set the heuristic to 0
         int heuristic = 0;
 
-        // while the current row is less than the row of the goal
+        // while currentRow is less than goal row
+        // Increase the currentRow and add 10 to heuristic
         while (currentRow < goalNode.getRow()) {
-            // increase the current row
             currentRow++;
-            // add 10 to the heuristic value
             heuristic = heuristic + 10;
-        } // end while loop
+        }
 
-        // while the current row is greater than the goal row
+        // While currentRow is greater than goal row
+        // Decrease the currenRow and add 10 to heuristic
         while (currentRow > goalNode.getRow()) {
-            // decrease the current row
             currentRow--;
-            // add 10 to the heuristic value
             heuristic = heuristic + 10;
-        } // end while loop
+        }
 
-        // while the current column is less than the column of the goal
+        // While currentColumn is greater than goal column
+        // Decrease the currenColumn and add 10 to heuristic
         while (currentColumn < goalNode.getCol()) {
-
-            // increase the current column
             currentColumn++;
-            // add 10 to the heuristic value
             heuristic = heuristic + 10;
-        } // end while loop
+        }
 
-        // while the current column is greater than the column of the goal
+        // While currentColumn is greater than goal column
+        // Decrease the currenColumn and add 10 to heuristic
         while (currentColumn > goalNode.getCol()) {
-            // decrease the current column
             currentColumn--;
-            // add 10 to the heuristic value
             heuristic = heuristic + 10;
-        } // end while loop
-
+        }
         return heuristic;
-    }// end of calculate heuristic method
-	
+    }
 }
