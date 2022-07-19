@@ -36,7 +36,7 @@ public class main {
         AStar tileBoard = new AStar();
 
         // Print out at beginning of console and open line after
-        System.out.println("Starting Board");
+        System.out.println("Start Board!");
         System.out.println("\n");
 
         //Print out the tiles 
@@ -48,24 +48,22 @@ public class main {
         do {
 
         	// Tell user to choose a starting row number
-            System.out.println("Choose a starting row number");
-            System.out.println("\n");
+            System.out.println("Choose your starting row number: ");
 
             //Get user input and create variable for starting row 
-            System.out.println("Row Number:");
+            System.out.println("Row Number Below: ");
             int startingRow = scanner.nextInt();
  
             // Tell user to choose a starting column number
-            System.out.println("Choose a starting column number");
-            System.out.println("\n");
+            System.out.println("Choose your starting column number: ");
 
             // Get user input and create variable for starting column
-            System.out.println("Column Number:");
+            System.out.println("Column Number Below:");
             int startingColumn = scanner.nextInt();
 
             // While loop for if starting row and column are unpathable print out an error and ask for new input
             while ((tileBoard.getType(startingRow, startingColumn)).equals(AStar.BLOCKED)) {
-                System.out.println("That position is unavailable. Please try again");
+                System.out.println("Please try again the path was not found!");
                
                 // Get user input and create starting row number
                 System.out.println("Row Number:");
@@ -82,18 +80,17 @@ public class main {
             // Set element
             tileBoard.setElement(startingRow, startingColumn, "s");
             // Get user input for goal row number
-            System.out.println("Choose a goal row number");
             System.out.println("\n");
+            System.out.println("Choose a goal row number");
 
             // Get user input and create starting row number
-            System.out.println("Row Number:");
+            System.out.println("Row Number Below:");
             int goalRow = scanner.nextInt();
 
             // Get user input and create starting column number
             System.out.println("Choose a goal column number");
-            System.out.println("\n");
 
-            System.out.println("Column Number:");
+            System.out.println("Column Number Below:");
             int goalColumn = scanner.nextInt();
 
 
@@ -122,7 +119,7 @@ public class main {
             tileBoard.createPath(startingRow, startingColumn, goalRow, goalColumn);
 
             // Print out solution
-            System.out.println("List of Path Nodes" + tileBoard.showPath());
+            System.out.println("List of Path Nodes: " + tileBoard.showPath());
             System.out.println(" ");
             System.out.println("Solution");
             
@@ -136,7 +133,7 @@ public class main {
 
             playAgain = scanner.next().charAt(0);
 
-            // Rest nodes, paths, start and goal
+            // Reset nodes, paths, start and goal
             tileBoard.resetPath();
             tileBoard.resetNodes();
 
@@ -369,7 +366,7 @@ public class main {
 
     /** Return if move is valid, not in closed list, and is pathable  */
     public boolean isValidMove(Node node) {
-        if (isWithinBounds(node) && pathable(node) && !closedList.contains(node)) {
+        if (isWithinBounds(node) && /**pathable(node) &&*/ !closedList.contains(node)) {
             return true;
         }
         else {
@@ -395,16 +392,16 @@ public class main {
         }
     }
 
-    /** Check if node is pathable method*/
+    /** Check if node is pathable method
     public boolean pathable(Node node) {
     	// if node is pathable return true
-        if (node.getType() == "") {					/** FIX */
+        if (node.getType() == "") {					/** FIX 
             return true;
         }
         else {
             return false;
         }
-    }
+    } */
 
     /** Find the lowest f value method */
     public Node findLowestValue() {
