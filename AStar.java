@@ -5,8 +5,8 @@ public class AStar {
 	 // Create a Node array list named finalPath
     private ArrayList<Node> finalPath;
 
-    // blocked represented by "b", pathable represented by "-"
-    public static String BLOCKED = "b";
+    // blocked represented by "x", pathable represented by "-"
+    public static String BLOCKED = "x";
     public static String PATHABLE = "-";
 
     // Tile String Array
@@ -86,7 +86,7 @@ public class AStar {
     public String showPath() {
         // if the path is null then return that path cannot be found
         if (finalPath == null) {
-            return "Path cannot be found";
+            return "The Path cannot be found";
         }
         // else it loops through path size
         else {
