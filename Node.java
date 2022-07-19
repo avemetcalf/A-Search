@@ -61,7 +61,6 @@ public class Node {
 	}
 	public void setType(int i) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	
